@@ -14,12 +14,12 @@ namespace Cw4.DAL
         {
             _students = new List<Student>
             {
-                new Student{IndexNumber="s11326",FirstName="Kinga",LastName="Malecka"},
-                new Student{IndexNumber="s12497",FirstName="Robert",LastName="Rak"},
-                new Student{IndexNumber="s13987",FirstName="Antoni",LastName="Pasek"}
+                new Student{indexNumber="",firstName="Kinga",lastName="Malecka"},
+                new Student{indexNumber="",firstName="Robert",lastName="Rak"},
+                new Student{indexNumber="",firstName="Antoni",lastName="Pasek"}
             };
         }
-        public IEnumerable<Student> GetStudent()
+        public IEnumerable<Student> getStudents()
         {
             return _students;
         }

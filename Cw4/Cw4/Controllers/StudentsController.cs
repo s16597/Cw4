@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Cw4.DAL;
 using Cw4.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +16,25 @@ namespace Cw4.Controllers
     [Route("api/students")]
     public class StudentsController : ControllerBase
     {
+        private readonly IDbService _dbService;
         private const string ConString = "Data Source=db-mssql;Initial Catalog=s16597;Integrated Security=True";
 
+        public StudentsController(IDbService dbService)
+        {
+            _dbService = dbService;
+        }
+
+        [HttpGet("getStudents")]
+
+        public IActionResult GetListStudent(string orderBy)
+        {
+
+            return Ok(_dbService.getStudents());
+
+        }
+
         [HttpGet]
-        public IActionResult GetStudents()
+        public IActionResult GetStudents(string orderBy)
         {
 
             var list = new List<Student>();
@@ -26,7 +42,7 @@ namespace Cw4.Controllers
             using (SqlCommand com = new SqlCommand())
             {
                 com.Connection = con;
-                com.CommandText = "select * from Student";
+                com.CommandText = "SELECT IndexNumber, FirstName, LastName, BirthDate, st.IdEnrollment, Name, Semester FROM Student st JOIN ENROLLMENT enr ON st.IdEnrollment = enr.IdEnrollment JOIN Studies stud on enr.IdStudy = stud.IdStudy";
 
                 con.Open();
                 SqlDataReader dr = com.ExecuteReader();
@@ -34,11 +50,14 @@ namespace Cw4.Controllers
                 {
 
                     var st = new Student();
-                    st.IndexNumber = dr["indexNumber"].ToString();
-                    st.FirstName = dr["FirstName"].ToString();
-                    st.LastName = dr["LastName"].ToString();
-                    st.BirthDate = Convert.ToDateTime(dr["BirthDate"].ToString());
-                    st.IdEnrollment = Convert.ToInt32(dr["IdEnrollment"].ToString());
+                    st.indexNumber = dr["IndexNumber"].ToString();
+                    st.firstName = dr["FirstName"].ToString();
+                    st.lastName = dr["LastName"].ToString();
+                    st.birthDate = Convert.ToDateTime(dr["BirthDate"].ToString());
+                    st.idEnrollment = Convert.ToInt32(dr["IdEnrollment"].ToString());
+                    st.study = dr["Name"].ToString();
+                    st.semester = Convert.ToInt32(dr["Semester"].ToString());
+
 
 
                     list.Add(st);
@@ -65,11 +84,11 @@ namespace Cw4.Controllers
                 if (dr.Read())
                 {
                     var st = new Student();
-                    st.IndexNumber = dr["indexNumber"].ToString();
-                    st.FirstName = dr["FirstName"].ToString();
-                    st.LastName = dr["LastName"].ToString();
-                    st.BirthDate = Convert.ToDateTime(dr["BirthDate"].ToString());
-                    st.IdEnrollment = Convert.ToInt32(dr["IdEnrollment"].ToString());
+                    st.indexNumber = dr["indexNumber"].ToString();
+                    st.firstName = dr["FirstName"].ToString();
+                    st.lastName = dr["LastName"].ToString();
+                    st.birthDate = Convert.ToDateTime(dr["BirthDate"].ToString());
+                    st.idEnrollment = Convert.ToInt32(dr["IdEnrollment"].ToString());
 
 
                     return Ok(st);
@@ -113,6 +132,25 @@ namespace Cw4.Controllers
             }
 
             return Ok(list2);
+        }
+
+        [HttpPost]
+        public IActionResult CreateStudent(Student student)
+        {
+            student.indexNumber = $"s{new Random().Next(1, 99999)}";
+            return Ok(student);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult PutStudent(int id, Student student)
+        {
+            return Ok("Aktualizacja studenta nr " + id + " dokończona.");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteStudent(int id)
+        {
+            return Ok("Usuwanie studenta nr " + id + " ukończone.");
         }
 
     }

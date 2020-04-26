@@ -7,11 +7,16 @@ namespace Cw4
 {
     public class Student
     {
-        public string IndexNumber { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime BirthDate { get; set; }
-        public int IdEnrollment { get; set; }
+        //public int idStudent { get; set; }
+        public string indexNumber { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public DateTime birthDate { get; set; }
+        public int idEnrollment { get; set; }
+
+        public string study { get; set; }
+
+        public int semester { get; set; }
       
     }
 }

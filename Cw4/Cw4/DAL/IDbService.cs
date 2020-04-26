@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Cw4.Models;
 
 
 namespace Cw4.DAL
@@ -9,6 +7,6 @@ namespace Cw4.DAL
 {
     public interface IDbService
     {
-        public IEnumerable<Student> GetStudent();
+        public IEnumerable<Student> getStudents();
     }
 }
